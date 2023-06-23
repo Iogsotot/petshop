@@ -1,0 +1,207 @@
+{
+  "clients": [
+    {
+      "id": 1,
+      "name": "Client 1",
+      "reportIds": [
+        1,
+        2
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Client 2",
+      "reportIds": [
+        3
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Client 3",
+      "reportIds": [
+        4,
+        5
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Client 4",
+      "reportIds": [
+        6
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Client 5",
+      "reportIds": [
+        7,
+        8,
+        9
+      ]
+    }
+  ],
+  "reports": [
+    {
+      "id": 1,
+      "clientId": 1,
+      "data": [
+        {
+          "type": "graph",
+          "value": "Graph 1"
+        },
+        {
+          "type": "chart",
+          "value": "Chart 1"
+        },
+        {
+          "type": "grid",
+          "value": "Grid 1"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "clientId": 1,
+      "data": [
+        {
+          "type": "graph",
+          "value": "Graph 2"
+        },
+        {
+          "type": "picture",
+          "value": "Picture 1"
+        },
+        {
+          "type": "chart",
+          "value": "Chart 2"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "clientId": 2,
+      "data": [
+        {
+          "type": "grid",
+          "value": "Grid 2"
+        },
+        {
+          "type": "chart",
+          "value": "Chart 3"
+        },
+        {
+          "type": "picture",
+          "value": "Picture 2"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "clientId": 3,
+      "data": [
+        {
+          "type": "graph",
+          "value": "Graph 3"
+        },
+        {
+          "type": "chart",
+          "value": "Chart 4"
+        },
+        {
+          "type": "picture",
+          "value": "Picture 3"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "clientId": 3,
+      "data": [
+        {
+          "type": "grid",
+          "value": "Grid 3"
+        },
+        {
+          "type": "chart",
+          "value": "Chart 5"
+        },
+        {
+          "type": "picture",
+          "value": "Picture 4"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "clientId": 4,
+      "data": [
+        {
+          "type": "graph",
+          "value": "Graph 4"
+        },
+        {
+          "type": "chart",
+          "value": "Chart 6"
+        },
+        {
+          "type": "picture",
+          "value": "Picture 5"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "clientId": 5,
+      "data": [
+        {
+          "type": "grid",
+          "value": "Grid 4"
+        },
+        {
+          "type": "chart",
+          "value": "Chart 7"
+        },
+        {
+          "type": "picture",
+          "value": "Picture 6"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "clientId": 5,
+      "data": [
+        {
+          "type": "graph",
+          "value": "Graph 5"
+        },
+        {
+          "type": "chart",
+          "value": "Chart 8"
+        },
+        {
+          "type": "picture",
+          "value": "Picture 7"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "clientId": 5,
+      "data": [
+        {
+          "type": "grid",
+          "value": "Grid 5"
+        },
+        {
+          "type": "chart",
+          "value": "Chart 9"
+        },
+        {
+          "type": "picture",
+          "value": "Picture 8"
+        }
+      ]
+    }
+  ]
+}
