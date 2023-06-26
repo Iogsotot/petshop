@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store/store';
 import { IClientResponse } from '../../services/petshopService';
 import { addClient } from '../../store/clientSlice';
+import { Button } from 'antd';
 
 const getId = () => {
   return Date.now().toString();
@@ -24,8 +25,9 @@ const Header = () => {
 
   return (
     <>
-      <button onClick={createNewClient}>New Client</button>
-
+      <Button type="primary" onClick={createNewClient}>
+        New Client
+      </Button>
       <form>
         <input placeholder="Client search" />
       </form>

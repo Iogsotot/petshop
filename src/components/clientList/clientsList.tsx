@@ -4,6 +4,8 @@ import { AppDispatch } from '../../store/store';
 import Client, { IClient } from '../client/client';
 import { deleteClient } from '../../store/clientSlice';
 
+import styles from './clientList.module.scss';
+
 interface IClientsList {
   clients: IClient[];
 }
@@ -17,12 +19,12 @@ const ClientsList = ({ clients }: IClientsList) => {
   };
 
   return (
-    <div>
+    <div className={styles.root}>
       {clients.map((client) => (
         <Client
           key={client.id}
           client={client}
-          onDelete={() => handleDeleteClient(client.id)}
+          onDeleteClient={() => handleDeleteClient(client.id)}
         />
       ))}
     </div>
