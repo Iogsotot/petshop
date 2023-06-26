@@ -4,10 +4,7 @@ import { AppDispatch } from '../../store/store';
 import { IClientResponse } from '../../services/petshopService';
 import { addClient } from '../../store/clientSlice';
 import { Button } from 'antd';
-
-const getId = () => {
-  return Date.now().toString();
-};
+import { getId } from '../../utils';
 
 const Header = () => {
   const dispatch: AppDispatch = useDispatch<AppDispatch>();

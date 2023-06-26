@@ -6,12 +6,17 @@ interface IPetshopService {
   createClient: (data: IClientResponse) => Promise<IClient>;
   deleteClient: (clientId: string) => Promise<void>;
   getReports: () => Promise<IReport[]>;
-  createReport: (reportId: string) => Promise<IReport>;
+  createReport: (data: IReportResponse) => Promise<IReportResponse>;
   deleteReport: (reportId: string) => Promise<void>;
+  deleteData: (reportId: string, dataId: string) => Promise<void>;
 }
 
 export interface IClientResponse extends Omit<IClient, 'reports'> {
   reportIds: string[];
+}
+
+export interface IReportResponse extends IReport {
+  clientId: string;
 }
 
 export default class PetshopService implements IPetshopService {
@@ -24,9 +29,9 @@ export default class PetshopService implements IPetshopService {
     return response.json();
   };
 
-  getClients = async () => {
+  getClients = async (): Promise<IClientResponse[]> => {
     const response = await fetch(`${this.apiBase}clients`);
-    const clients = await this.handleResponse(response);
+    const clients: IClientResponse[] = await this.handleResponse(response);
     return clients;
   };
 
@@ -54,13 +59,13 @@ export default class PetshopService implements IPetshopService {
     return reports;
   };
 
-  createReport = async (reportId: string) => {
+  createReport = async (data: IReportResponse) => {
     const response = await fetch(`${this.apiBase}reports`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id: reportId }),
+      body: JSON.stringify(data),
     });
     const createdReport = await this.handleResponse(response);
     return createdReport;
@@ -70,5 +75,23 @@ export default class PetshopService implements IPetshopService {
     await fetch(`${this.apiBase}reports/${reportId}`, {
       method: 'DELETE',
     });
+  };
+
+  deleteData = async (reportId: string, dataId: string) => {
+    const response = await fetch(`${this.apiBase}reports/${reportId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        reports: [
+          {
+            id: reportId,
+            data: [{ id: dataId }],
+          },
+        ],
+      }),
+    });
+    await this.handleResponse(response);
   };
 }

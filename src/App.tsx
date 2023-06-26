@@ -8,6 +8,7 @@ import { AppDispatch } from './store/store';
 import { RootState } from './types';
 import styles from './App.module.scss';
 import { fetchClients } from './store/clientSlice';
+import { fetchReports } from './store/reportSlice';
 
 function App() {
   const clients = useSelector((state: RootState) => state.clients);
@@ -15,6 +16,10 @@ function App() {
 
   useEffect(() => {
     dispatch(fetchClients());
+  }, []);
+
+  useEffect(() => {
+    dispatch(fetchReports());
   }, []);
 
   return (
