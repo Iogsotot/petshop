@@ -1,13 +1,15 @@
 import React from 'react';
-import PetshopService, { IClientResponse } from '../../services/petshopService';
-// import styles from './header.module.scss';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../store/store';
+import { IClientResponse } from '../../services/petshopService';
+import { addClient } from '../../store/clientSlice';
 
 const getId = () => {
   return Date.now().toString();
 };
 
 const Header = () => {
-  const service: PetshopService = new PetshopService();
+  const dispatch: AppDispatch = useDispatch<AppDispatch>();
 
   const createNewClient = () => {
     const id = getId();
@@ -17,8 +19,7 @@ const Header = () => {
       name: `Client ${id}`,
     };
     console.log('create btn clicked: ', id);
-    service.createClient(newClientData);
-    // TODO: add refetch clients after creation new client
+    dispatch(addClient(newClientData));
   };
 
   return (
@@ -26,10 +27,7 @@ const Header = () => {
       <button onClick={createNewClient}>New Client</button>
 
       <form>
-        <input
-          placeholder="Client search"
-          // value={} onChange={ }
-        />
+        <input placeholder="Client search" />
       </form>
     </>
   );

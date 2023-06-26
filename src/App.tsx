@@ -1,29 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import ClientsList from './components/clientList/clientsList';
 import Header from './components/header/header';
-import { IClient } from './components/client/client';
+
+import { AppDispatch } from './store/store';
+import { RootState } from './types';
 import styles from './App.module.scss';
-import PetshopService from './services/petshopService';
+import { fetchClients } from './store/clientSlice';
 
 function App() {
-  const [clients, setClients] = useState<IClient[]>([]);
-  const service = new PetshopService();
+  const clients = useSelector((state: RootState) => state.clients);
+  const dispatch: AppDispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    const fetchClients = async () => {
-      const fetchedClients = await service.getClients();
-      setClients(fetchedClients);
-    };
-
-    fetchClients();
+    dispatch(fetchClients());
   }, []);
 
   return (
     <div className={styles.App}>
-      <Header></Header>
+      <Header />
       <main>
         main:
-        <ClientsList clients={clients}></ClientsList>
+        <ClientsList clients={clients} />
       </main>
       <footer>footer</footer>
     </div>
