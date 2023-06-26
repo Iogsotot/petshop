@@ -1,5 +1,5 @@
 import { IClient } from '../components/client/client';
-import { IReport } from '../components/report/report';
+import { IReport, TData } from '../components/report/report';
 
 interface IPetshopService {
   getClients: () => Promise<IClient[]>;
@@ -78,20 +78,18 @@ export default class PetshopService implements IPetshopService {
   };
 
   deleteData = async (reportId: string, dataId: string) => {
-    const response = await fetch(`${this.apiBase}reports/${reportId}`, {
-      method: 'PATCH',
+    const response = await fetch(`${this.apiBase}reports/${reportId}`);
+    const report = await this.handleResponse(response);
+
+    report.data = report.data.filter((data: TData) => data.id !== dataId);
+
+    const updateResponse = await fetch(`${this.apiBase}reports/${reportId}`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        reports: [
-          {
-            id: reportId,
-            data: [{ id: dataId }],
-          },
-        ],
-      }),
+      body: JSON.stringify(report),
     });
-    await this.handleResponse(response);
+    await this.handleResponse(updateResponse);
   };
 }
