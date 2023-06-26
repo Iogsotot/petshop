@@ -4,7 +4,7 @@ import { IReport } from '../report/report';
 import PetshopService from '../../services/petshopService';
 
 export interface IClient {
-  id: number;
+  id: string;
   name: string;
   reports: IReport[];
 }
@@ -15,28 +15,17 @@ interface ClientProps {
 
 const Client = ({ client }: ClientProps) => {
   const { id, name } = client;
-  const service = new PetshopService
+  const service = new PetshopService();
 
-  // Пример использования
-  const newClientData = {
-    id: 16,
-    name: 'Client 16',
-    reportIds: [10, 11],
-  };
-
-  const deleteClient = (id: number) => {
+  const deleteClient = (id: string) => {
     console.log(`delete Client ${id}`);
-    console.log('asdasdasd');
-
-    console.log('data: ', newClientData);
-    console.log('11111');
-
-    service.createClient(newClientData);
+    service.deleteClient(id);
+    // TODO: add refetch clients after creation new client
   };
   return (
     <div className={styles.root}>
       <button onClick={() => deleteClient(id)}>X</button>
-      name {name}id: {id}
+      {name}
     </div>
   );
 };

@@ -1,18 +1,26 @@
-import React from 'react';
-import styles from './App.module.scss';
+import React, { useEffect, useState } from 'react';
 import ClientsList from './components/clientList/clientsList';
-// import AppRoutes from './appRoutes';
+import Header from './components/header/header';
+import { IClient } from './components/client/client';
+import styles from './App.module.scss';
+import PetshopService from './services/petshopService';
 
 function App() {
-  const clients = [
-    { id: 1, name: 'mockName', reports: [] },
-    { id: 2, name: 'mockName2', reports: [] },
-    { id: 3, name: 'mockName3', reports: [] },
-  ];
+  const [clients, setClients] = useState<IClient[]>([]);
+  const service = new PetshopService();
+
+  useEffect(() => {
+    const fetchClients = async () => {
+      const fetchedClients = await service.getClients();
+      setClients(fetchedClients);
+    };
+
+    fetchClients();
+  }, []);
+
   return (
-    // <AppRoutes></AppRoutes>
     <div className={styles.App}>
-      <header className="header">header</header>
+      <Header></Header>
       <main>
         main:
         <ClientsList clients={clients}></ClientsList>
