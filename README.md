@@ -7,7 +7,7 @@ To run the application, follow these steps:
 
  1. Copy the repository code to your computer:
     
-    ### `git clone [repository-url]`
+    ### `git clone https://github.com/Iogsotot/petshop.git`
 		
 
  2. Install project dependencies:
