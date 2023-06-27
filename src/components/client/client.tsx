@@ -1,8 +1,6 @@
-import React from 'react';
-// import styles from './client.module.scss';
 import CollapsedBlock from '../collapsedBlock/collapsedBlock';
 import Report, { IReport, ReportsHash } from '../report/report';
-import { Button, Spin } from 'antd';
+import { Button, Empty, Spin } from 'antd';
 import { AppDispatch, selectReports } from '../../store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { IReportResponse } from '../../services/petshopService';
@@ -48,24 +46,30 @@ const Client = ({ client, onDeleteClient }: ClientProps) => {
     dispatch(addReport(newReport));
   };
 
+  const reportsList = filteredReports.map((report: IReport) => (
+    <Spin spinning={isLoading} key={`spin-${report.id}`}>
+      <Report
+        key={report.id}
+        report={report}
+        onDeleteReport={() => handleDeleteReport(report.id)}
+        onDeleteData={onDeleteData}
+      ></Report>
+    </Spin>
+  ));
+
+  const reportsRender = filteredReports.length ? (
+    reportsList
+  ) : (
+    <Empty description="no reports"></Empty>
+  );
+
   return (
     <CollapsedBlock label={name} onDelete={onDeleteClient}>
       <p>Client #{id} reports</p>
       <Button type="primary" onClick={createNewReport}>
         Add report
       </Button>
-      <Spin spinning={isLoading}>
-        {filteredReports.map((report: IReport) => (
-          <Spin spinning={isLoading} key={`spin-${report.id}`}>
-            <Report
-              key={report.id}
-              report={report}
-              onDeleteReport={() => handleDeleteReport(report.id)}
-              onDeleteData={onDeleteData}
-            ></Report>
-          </Spin>
-        ))}
-      </Spin>
+      <Spin spinning={isLoading}>{reportsRender}</Spin>
     </CollapsedBlock>
   );
 };

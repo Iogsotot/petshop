@@ -1,11 +1,10 @@
-import React from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store/store';
 import Client, { IClient } from '../client/client';
 import { deleteClient } from '../../store/clientSlice';
 
 import styles from './clientList.module.scss';
-import { Spin } from 'antd';
+import { Empty, Spin } from 'antd';
 
 interface IClientsList {
   isLoading: boolean;
@@ -21,17 +20,21 @@ const ClientsList = ({ isLoading, clients }: IClientsList) => {
 
   if (isLoading) return <Spin />;
 
-  return (
-    <div className={styles.root}>
-      {clients.map((client) => (
-        <Client
-          key={client.id}
-          client={client}
-          onDeleteClient={() => handleDeleteClient(client.id)}
-        />
-      ))}
-    </div>
+  const clientsList = clients.map((client) => (
+    <Client
+      key={client.id}
+      client={client}
+      onDeleteClient={() => handleDeleteClient(client.id)}
+    />
+  ));
+
+  const clientsRender = clientsList.length ? (
+    clientsList
+  ) : (
+    <Empty description="no clients"></Empty>
   );
+
+  return <div className={styles.root}>{clientsRender}</div>;
 };
 
 export default ClientsList;

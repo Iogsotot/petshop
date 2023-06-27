@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import styles from './collapsedBlock.module.scss';
 import { Button, Collapse } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
@@ -6,7 +6,7 @@ import { CloseOutlined } from '@ant-design/icons';
 interface CollapsedBlockProps {
   label: string;
   onDelete: () => void;
-  children?: ReactNode; // Keep the children prop
+  children?: ReactNode;
 }
 
 const CollapsedBlock = ({ label, onDelete, children }: CollapsedBlockProps) => (
@@ -17,7 +17,7 @@ const CollapsedBlock = ({ label, onDelete, children }: CollapsedBlockProps) => (
       onClick={onDelete}
       className={styles['close-btn']}
     />
-    <Collapse items={[{ key: label, label: label, children }]} />{' '}
+    <Collapse items={[{ key: label, label: label, children }]} />
   </div>
 );
 

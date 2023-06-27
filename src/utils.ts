@@ -4,6 +4,8 @@ import { IReportResponse } from './services/petshopService';
 
 // synthetic function to create id
 export const getId = () => {
+  // splice  here is used to reduce the length of the ID,
+  // this does not affect the functionality within the test task
   return Date.now().toString().split('').splice(3).join('');
 };
 
