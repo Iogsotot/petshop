@@ -5,17 +5,21 @@ import Client, { IClient } from '../client/client';
 import { deleteClient } from '../../store/clientSlice';
 
 import styles from './clientList.module.scss';
+import { Spin } from 'antd';
 
 interface IClientsList {
+  isLoading: boolean;
   clients: IClient[];
 }
 
-const ClientsList = ({ clients }: IClientsList) => {
+const ClientsList = ({ isLoading, clients }: IClientsList) => {
   const dispatch: AppDispatch = useDispatch<AppDispatch>();
 
   const handleDeleteClient = (clientId: string) => {
     dispatch(deleteClient(clientId));
   };
+
+  if (isLoading) return <Spin />;
 
   return (
     <div className={styles.root}>

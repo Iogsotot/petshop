@@ -26,7 +26,7 @@ function App() {
       <Header />
       <main>
         main:
-        <ClientsList clients={clients} />
+        <ClientsList isLoading={clients.loading} clients={clients.data} />
       </main>
       <footer>footer</footer>
     </div>

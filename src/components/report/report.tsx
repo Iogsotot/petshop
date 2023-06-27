@@ -1,5 +1,5 @@
-import CollapsedBlock from '../collapsedBlock/collapsedBlock';
-import { Button } from 'antd';
+import React, { useState } from 'react';
+import { Button, Spin } from 'antd';
 import { getId, getDataType, getDataValue } from '../../utils';
 import { AppDispatch } from '../../store/store';
 import { useDispatch } from 'react-redux';
@@ -7,6 +7,7 @@ import { addData } from '../../store/reportSlice';
 
 import { CloseOutlined } from '@ant-design/icons';
 import styles from './report.module.scss';
+import CollapsedBlock from '../collapsedBlock/collapsedBlock';
 
 export type TData = {
   id: string;
@@ -36,6 +37,8 @@ const Report = ({ report, onDeleteReport, onDeleteData }: ReportProps) => {
   const { id, data } = report;
   const dispatch: AppDispatch = useDispatch<AppDispatch>();
 
+  const [loadingImages, setLoadingImages] = useState<string[]>([]);
+
   const createNewData = () => {
     const dataId = getId();
     const dataType = getDataType();
@@ -46,6 +49,12 @@ const Report = ({ report, onDeleteReport, onDeleteData }: ReportProps) => {
       value: dataValue,
     };
     dispatch(addData({ reportId: id, newData: newDataItem }));
+  };
+
+  const handleImageLoad = (value: string) => {
+    setLoadingImages((prevLoadingImages) =>
+      prevLoadingImages.filter((imageUrl) => imageUrl !== value)
+    );
   };
 
   return (
@@ -65,9 +74,14 @@ const Report = ({ report, onDeleteReport, onDeleteData }: ReportProps) => {
               onClick={() => onDeleteData(dataItem.id, id)}
               className={styles['close-btn']}
             />
-            <div className={styles.dataView}>
-              <img src={`/img/${dataItem.value}`}></img>
-            </div>
+            <Spin spinning={loadingImages.includes(dataItem.value)}>
+              <div className={styles.dataView}>
+                <img
+                  src={`/img/${dataItem.value}`}
+                  onLoad={() => handleImageLoad(dataItem.value)}
+                />
+              </div>
+            </Spin>
           </div>
         ))}
       </div>

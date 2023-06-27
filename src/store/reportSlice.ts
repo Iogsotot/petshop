@@ -58,48 +58,101 @@ export const selectMemoizedReports = createSelector(
 
 export const reportsSlice = createSlice({
   name: 'reports',
-  initialState: {} as ReportsHash,
+  initialState: {
+    data: {} as ReportsHash,
+    loading: false,
+    error: null as string | null,
+  },
   reducers: {
     setReports: (state, action: PayloadAction<ReportsHash>) => {
-      return action.payload;
+      state.data = action.payload;
+    },
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
+    },
+    setError: (state, action: PayloadAction<string | null>) => {
+      state.error = action.payload;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(addReport.fulfilled, (state, action) => {
-      const report = action.payload;
-      state[report.id] = report;
-    });
-
-    builder.addCase(deleteReport.fulfilled, (state, action) => {
-      const reportId = action.payload;
-      delete state[reportId];
-    });
-
-    builder.addCase(addData.fulfilled, (state, action) => {
-      const { reportId, newData } = action.payload;
-      const report = state[reportId];
-      if (report) {
-        report.data.push(newData);
-      }
-    });
-
-    builder.addCase(deleteData.fulfilled, (state, action) => {
-      const { reportId, dataId } = action.payload;
-      const report = state[reportId];
-      if (report) {
-        report.data = report.data.filter((data) => data.id !== dataId);
-      }
-    });
+    builder
+      .addCase(addReport.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(addReport.fulfilled, (state, action) => {
+        const report = action.payload;
+        state.data[report.id] = report;
+        state.loading = false;
+      })
+      .addCase(addReport.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to add report.';
+      })
+      .addCase(deleteReport.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteReport.fulfilled, (state, action) => {
+        const reportId = action.payload;
+        delete state.data[reportId];
+        state.loading = false;
+      })
+      .addCase(deleteReport.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to delete report.';
+      })
+      .addCase(addData.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(addData.fulfilled, (state, action) => {
+        const { reportId, newData } = action.payload;
+        const report = state.data[reportId];
+        if (report) {
+          report.data.push(newData);
+        }
+        state.loading = false;
+      })
+      .addCase(addData.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to add data.';
+      })
+      .addCase(deleteData.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteData.fulfilled, (state, action) => {
+        const { reportId, dataId } = action.payload;
+        const report = state.data[reportId];
+        if (report) {
+          report.data = report.data.filter((data) => data.id !== dataId);
+        }
+        state.loading = false;
+      })
+      .addCase(deleteData.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to delete data.';
+      });
   },
 });
 
 export const fetchReports = () => {
   return async (dispatch: typeof store.dispatch) => {
-    const fetchedReports: IReportResponse[] = await service.getReports();
-    dispatch(setReports(convertReports(fetchedReports)));
+    dispatch(setLoading(true));
+    dispatch(setError(null));
+
+    try {
+      const fetchedReports: IReportResponse[] = await service.getReports();
+      dispatch(setReports(convertReports(fetchedReports)));
+    } catch (error: unknown) {
+      dispatch(setError('Failed to fetch reports.'));
+    } finally {
+      dispatch(setLoading(false));
+    }
   };
 };
 
-export const { setReports } = reportsSlice.actions;
+export const { setReports, setLoading, setError } = reportsSlice.actions;
 
 export default reportsSlice.reducer;

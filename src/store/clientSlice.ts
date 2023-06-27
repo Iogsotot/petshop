@@ -39,31 +39,68 @@ export const selectMemoizedClients = createSelector(
 
 export const clientsSlice = createSlice({
   name: 'clients',
-  initialState: [] as IClient[],
+  initialState: {
+    data: [] as IClient[],
+    loading: false,
+    error: null as string | null,
+  },
   reducers: {
     setClients: (state, action) => {
-      return action.payload;
+      state.data = action.payload;
+    },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    },
+    setError: (state, action) => {
+      state.error = action.payload;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(addClient.fulfilled, (state, action) => {
-      state.push(action.payload);
-    });
-
-    builder.addCase(deleteClient.fulfilled, (state, action) => {
-      const clientId = action.payload;
-      return state.filter((client) => client.id !== clientId);
-    });
+    builder
+      .addCase(addClient.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(addClient.fulfilled, (state, action) => {
+        state.data.push(action.payload);
+        state.loading = false;
+      })
+      .addCase(addClient.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to add client.';
+      })
+      .addCase(deleteClient.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteClient.fulfilled, (state, action) => {
+        const clientId = action.payload;
+        state.data = state.data.filter((client) => client.id !== clientId);
+        state.loading = false;
+      })
+      .addCase(deleteClient.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to delete client.';
+      });
   },
 });
 
 export const fetchClients = () => {
   return async (dispatch: typeof store.dispatch) => {
-    const fetchedClients = await service.getClients();
-    dispatch(setClients(fetchedClients));
+    dispatch(setLoading(true));
+    dispatch(setError(null));
+
+    try {
+      const fetchedClients = await service.getClients();
+      dispatch(setClients(fetchedClients));
+    } catch (error: unknown) {
+      dispatch(setError('Failed to fetch clients.'));
+    } finally {
+      dispatch(setLoading(false));
+    }
   };
 };
 
-export const { setClients } = clientsSlice.actions;
+export const { setClients, setLoading, setError } = clientsSlice.actions;
 
 export default clientsSlice.reducer;
