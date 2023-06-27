@@ -1,7 +1,11 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import {
+  createAsyncThunk,
+  createSlice,
+  createSelector,
+} from '@reduxjs/toolkit';
 import PetshopService, { IClientResponse } from '../services/petshopService';
 import { IClient } from '../components/client/client';
-import { store } from './store';
+import { RootState, store } from './store';
 
 const service = new PetshopService();
 
@@ -19,6 +23,18 @@ export const deleteClient = createAsyncThunk(
     await service.deleteClient(clientId);
     return clientId;
   }
+);
+
+export const selectClientsSlice = (state: RootState) => state.clients;
+
+export const selectClients = createSelector(
+  [selectClientsSlice],
+  (clientsSlice) => clientsSlice
+);
+
+export const selectMemoizedClients = createSelector(
+  [selectClients],
+  (clients) => clients
 );
 
 export const clientsSlice = createSlice({

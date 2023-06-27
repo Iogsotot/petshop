@@ -1,14 +1,13 @@
 import React from 'react';
 // import styles from './client.module.scss';
 import CollapsedBlock from '../collapsedBlock/collapsedBlock';
-import Report, { IReport } from '../report/report';
+import Report, { IReport, ReportsHash } from '../report/report';
 import { Button } from 'antd';
-import { AppDispatch } from '../../store/store';
+import { AppDispatch, selectReports } from '../../store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { IReportResponse } from '../../services/petshopService';
 import { addReport, deleteData, deleteReport } from '../../store/reportSlice';
 import { getId } from '../../utils';
-import { RootState } from '../../types';
 
 export interface IClient {
   id: string;
@@ -24,8 +23,9 @@ const Client = ({ client, onDeleteClient }: ClientProps) => {
   const { name, id } = client;
   const dispatch: AppDispatch = useDispatch<AppDispatch>();
 
-  const reports = useSelector((state: RootState) =>
-    Object.values(state.reports).filter((report) => report.clientId === id)
+  const reports: ReportsHash = useSelector(selectReports);
+  const filteredReports: IReport[] = Object.values(reports).filter(
+    (report) => report.clientId === id
   );
 
   const handleDeleteReport = (reportId: string) => {
@@ -51,7 +51,7 @@ const Client = ({ client, onDeleteClient }: ClientProps) => {
       <Button type="primary" onClick={createNewReport}>
         Add report
       </Button>
-      {reports.map((report: IReport) => (
+      {filteredReports.map((report: IReport) => (
         <Report
           key={report.id}
           report={report}

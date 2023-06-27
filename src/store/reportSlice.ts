@@ -1,9 +1,13 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import {
+  PayloadAction,
+  createAsyncThunk,
+  createSlice,
+  createSelector,
+} from '@reduxjs/toolkit';
 import PetshopService, { IReportResponse } from '../services/petshopService';
 import { IReportData, ReportsHash } from '../components/report/report';
-
 import { convertReports } from '../utils';
-import { store } from './store';
+import { RootState, store } from './store';
 
 const service = new PetshopService();
 
@@ -38,6 +42,18 @@ export const deleteData = createAsyncThunk(
     await service.deleteData(reportId, dataId);
     return { reportId, dataId };
   }
+);
+
+export const selectReportsSlice = (state: RootState) => state.reports;
+
+export const selectReports = createSelector(
+  [selectReportsSlice],
+  (reportsSlice) => reportsSlice
+);
+
+export const selectMemoizedReports = createSelector(
+  [selectReports],
+  (reports) => reports
 );
 
 export const reportsSlice = createSlice({

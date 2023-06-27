@@ -4,14 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import ClientsList from './components/clientList/clientsList';
 import Header from './components/header/header';
 
-import { AppDispatch } from './store/store';
-import { RootState } from './types';
-import styles from './App.module.scss';
+import { AppDispatch, selectClients } from './store/store';
 import { fetchClients } from './store/clientSlice';
 import { fetchReports } from './store/reportSlice';
+import styles from './App.module.scss';
 
 function App() {
-  const clients = useSelector((state: RootState) => state.clients);
+  const clients = useSelector(selectClients);
   const dispatch: AppDispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
