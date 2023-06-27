@@ -5,20 +5,26 @@ A test CRUD application. Technical stack: React, TypeScript, Redux Toolkit, CSS 
 
 To run the application, follow these steps:
 
-    Copy the repository code to your computer:
+ 1. Copy the repository code to your computer:
+    
     ### `git clone [repository-url]`
 		
 
-    Install project dependencies:
+ 2. Install project dependencies:
+    
     ### `npm install`
 		
 
-    Start the server:
-		### `npm run server`
+ 3. Start the server:
+    
+    ### `npm run server`
     
 
-    Launch the application in development mode:
+ 4. Launch the application in development mode:
+    
     ### `npm start`
+
+ 5. Open `http://localhost:3000/` in your browser
 
 Note: The development mode may have certain peculiarities, for more details, please refer to the following link: [StrictMode](https://react.dev/reference/react/StrictMode)
 
