@@ -1,11 +1,12 @@
 import {
   createAsyncThunk,
-  createSlice,
   createSelector,
+  createSlice,
+  PayloadAction,
 } from '@reduxjs/toolkit';
 import PetshopService, { IClientResponse } from '../services/petshopService';
 import { IClient } from '../components/client/client';
-import { RootState, store } from './store';
+import { RootState, AppDispatch } from './store';
 
 const service = new PetshopService();
 
@@ -25,12 +26,16 @@ export const deleteClient = createAsyncThunk(
   }
 );
 
+export const setSearchValue = (value: string) => {
+  return (dispatch: AppDispatch) => {
+    dispatch(clientsSlice.actions.setSearchValue(value));
+  };
+};
+
 export const selectClientsSlice = (state: RootState) => state.clients;
 
-export const selectClients = createSelector(
-  [selectClientsSlice],
-  (clientsSlice) => clientsSlice
-);
+export const selectClients = (state: RootState) =>
+  selectClientsSlice(state).data;
 
 export const selectMemoizedClients = createSelector(
   [selectClients],
@@ -43,16 +48,20 @@ export const clientsSlice = createSlice({
     data: [] as IClient[],
     loading: false,
     error: null as string | null,
+    searchValue: '',
   },
   reducers: {
-    setClients: (state, action) => {
+    setClients: (state, action: PayloadAction<IClient[]>) => {
       state.data = action.payload;
     },
-    setLoading: (state, action) => {
+    setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
-    setError: (state, action) => {
+    setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
+    },
+    setSearchValue: (state, action: PayloadAction<string>) => {
+      state.searchValue = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -86,7 +95,7 @@ export const clientsSlice = createSlice({
 });
 
 export const fetchClients = () => {
-  return async (dispatch: typeof store.dispatch) => {
+  return async (dispatch: AppDispatch) => {
     dispatch(setLoading(true));
     dispatch(setError(null));
 
