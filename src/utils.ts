@@ -1,4 +1,5 @@
 import { IReport, ReportsHash } from './components/report/report';
+import { pictures } from './constants';
 import { IReportResponse } from './services/petshopService';
 
 // synthetic function to create id
@@ -12,3 +13,13 @@ export const convertReports = (reports: IReportResponse[]): ReportsHash =>
     acc[id] = { id, data, clientId };
     return acc;
   }, {});
+
+export const getDataType = (): string => {
+  //TODO: implement random from dataTypes[]
+  return 'picture';
+};
+
+export const getDataValue = (arr: string[] = pictures): string => {
+  const randomIndex = Math.floor(Math.random() * arr.length);
+  return arr[randomIndex];
+};

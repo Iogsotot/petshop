@@ -16,7 +16,6 @@ const Header = () => {
       id,
       name: `Client ${id}`,
     };
-    console.log('create btn clicked: ', id);
     dispatch(addClient(newClientData));
   };
 

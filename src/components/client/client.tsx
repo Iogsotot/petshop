@@ -29,12 +29,9 @@ const Client = ({ client, onDeleteClient }: ClientProps) => {
   );
 
   const handleDeleteReport = (reportId: string) => {
-    console.log('onDeleteReport: ', reportId);
     dispatch(deleteReport(reportId));
   };
   const onDeleteData = (dataId: string, reportId: string) => {
-    console.log('onDeleteData: ', dataId, 'report id: ', reportId);
-    console.log(reports);
     dispatch(deleteData({ dataId, reportId }));
   };
 
@@ -45,7 +42,6 @@ const Client = ({ client, onDeleteClient }: ClientProps) => {
       data: [],
       clientId: id,
     };
-    console.log('create report for Client: ', name, id);
     dispatch(addReport(newReport));
   };
 

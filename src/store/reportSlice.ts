@@ -1,8 +1,9 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import PetshopService, { IReportResponse } from '../services/petshopService';
-import { ReportsHash } from '../components/report/report';
-import { store } from './store';
+import { IReportData, ReportsHash } from '../components/report/report';
+
 import { convertReports } from '../utils';
+import { store } from './store';
 
 const service = new PetshopService();
 
@@ -22,11 +23,20 @@ export const deleteReport = createAsyncThunk(
   }
 );
 
+export const addData = createAsyncThunk(
+  'reports/addData',
+  async (data: IReportData) => {
+    const { reportId, newData } = data;
+    await service.addDataItem(reportId, newData);
+    return data;
+  }
+);
+
 export const deleteData = createAsyncThunk(
   'reports/deleteData',
-  async ({ dataId, reportId }: { dataId: string; reportId: string }) => {
+  async ({ reportId, dataId }: { reportId: string; dataId: string }) => {
     await service.deleteData(reportId, dataId);
-    return { dataId, reportId };
+    return { reportId, dataId };
   }
 );
 
@@ -49,8 +59,16 @@ export const reportsSlice = createSlice({
       delete state[reportId];
     });
 
+    builder.addCase(addData.fulfilled, (state, action) => {
+      const { reportId, newData } = action.payload;
+      const report = state[reportId];
+      if (report) {
+        report.data.push(newData);
+      }
+    });
+
     builder.addCase(deleteData.fulfilled, (state, action) => {
-      const { dataId, reportId } = action.payload;
+      const { reportId, dataId } = action.payload;
       const report = state[reportId];
       if (report) {
         report.data = report.data.filter((data) => data.id !== dataId);

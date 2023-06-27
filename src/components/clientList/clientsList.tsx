@@ -14,7 +14,6 @@ const ClientsList = ({ clients }: IClientsList) => {
   const dispatch: AppDispatch = useDispatch<AppDispatch>();
 
   const handleDeleteClient = (clientId: string) => {
-    console.log(`delete Client ${clientId}`);
     dispatch(deleteClient(clientId));
   };
 
