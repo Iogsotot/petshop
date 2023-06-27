@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/icons": "^5.1.4",
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -11,21 +12,28 @@
     "@types/node": "^16.18.36",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
+    "@types/redux-thunk": "^2.1.0",
+    "antd": "^5.6.3",
     "install": "^0.13.0",
     "node-sass": "^7.0.3",
     "npm": "^9.7.2",
     "react": "^18.2.0",
     "react-css-modules": "^4.7.11",
     "react-dom": "^18.2.0",
+    "react-redux": "^8.1.1",
     "react-router-dom": "^6.14.0",
     "react-scripts": "5.0.1",
+    "redux-thunk": "^2.4.2",
     "typescript": "^4.9.5"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "server": "json-server --watch db.json --port 3001",
+    "eject": "react-scripts eject",
+    "lint": "eslint --ignore-path .gitignore --fix src",
+    "prettier": "prettier src --write"
   },
   "eslintConfig": {
     "extends": [
@@ -44,5 +52,14 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.60.0",
+    "@typescript-eslint/parser": "^5.60.0",
+    "eslint": "^8.43.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.32.2",
+    "prettier": "^2.8.8"
   }
 }

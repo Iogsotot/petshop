@@ -1,0 +1,11 @@
+.root {
+  position: relative;
+  margin: auto;
+}
+
+.close-btn {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  z-index: 1;
+}
