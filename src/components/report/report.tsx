@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
-import { Button, Empty, Spin } from 'antd';
+import { Button, Card, Empty } from 'antd';
 import { getId, getDataType, getDataValue } from '../../utils';
 import { AppDispatch } from '../../store/store';
 import { useDispatch } from 'react-redux';
 import { addData } from '../../store/reportSlice';
+import CollapsedBlock from '../collapsedBlock/collapsedBlock';
 
 import { CloseOutlined } from '@ant-design/icons';
 import styles from './report.module.scss';
-import CollapsedBlock from '../collapsedBlock/collapsedBlock';
 
 export type TData = {
   id: string;
@@ -37,8 +36,6 @@ const Report = ({ report, onDeleteReport, onDeleteData }: ReportProps) => {
   const { id, data } = report;
   const dispatch: AppDispatch = useDispatch<AppDispatch>();
 
-  const [loadingImages, setLoadingImages] = useState<string[]>([]);
-
   const createNewData = () => {
     const dataId = getId();
     const dataType = getDataType();
@@ -51,14 +48,14 @@ const Report = ({ report, onDeleteReport, onDeleteData }: ReportProps) => {
     dispatch(addData({ reportId: id, newData: newDataItem }));
   };
 
-  const handleImageLoad = (value: string) => {
-    setLoadingImages((prevLoadingImages) =>
-      prevLoadingImages.filter((imageUrl) => imageUrl !== value)
-    );
-  };
-
   const dataList = data.map((dataItem) => (
-    <div key={dataItem.id} className={styles.dataItem}>
+    <Card
+      key={dataItem.id}
+      className={styles.dataItem}
+      hoverable
+      cover={<img src={`/img/${dataItem.value}`} alt="animal" />}
+    >
+      description
       <Button
         type="primary"
         shape="circle"
@@ -67,15 +64,7 @@ const Report = ({ report, onDeleteReport, onDeleteData }: ReportProps) => {
         onClick={() => onDeleteData(dataItem.id, id)}
         className={styles['close-btn']}
       />
-      <Spin spinning={loadingImages.includes(dataItem.value)}>
-        <div className={styles.dataView}>
-          <img
-            src={`/img/${dataItem.value}`}
-            onLoad={() => handleImageLoad(dataItem.value)}
-          />
-        </div>
-      </Spin>
-    </div>
+    </Card>
   ));
 
   const dataRender = dataList.length ? (

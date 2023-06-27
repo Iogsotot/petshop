@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
-import styles from './collapsedBlock.module.scss';
 import { Button, Collapse } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
+import styles from './collapsedBlock.module.scss';
 
 interface CollapsedBlockProps {
   label: string;

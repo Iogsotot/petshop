@@ -6,8 +6,9 @@
 }
 
 .dataItems {
-	display: flex;
-	flex-direction: row;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	justify-items: center;
 	flex-wrap: wrap;
 	gap: 15px 5px;
 	margin-top: 10px;
@@ -15,21 +16,12 @@
 
 .dataItem {
 	position: relative;
+	width: 180px;
 }
 
-.dataView {
-	height: 100px;
-	width: 200px;
-	display: flex;
-
-	justify-content: center;
-	margin: auto 10px auto auto;
-
-	img {
-		height: inherit;
-	}
+.ant-card-body {
+	padding: 5px;
 }
-
 .empty {
 	margin: auto;
 }

@@ -7,6 +7,8 @@ import { IReportResponse } from '../../services/petshopService';
 import { addReport, deleteData, deleteReport } from '../../store/reportSlice';
 import { getId } from '../../utils';
 
+import styles from './client.module.scss';
+
 export interface IClient {
   id: string;
   name: string;
@@ -66,7 +68,7 @@ const Client = ({ client, onDeleteClient }: ClientProps) => {
   return (
     <CollapsedBlock label={name} onDelete={onDeleteClient}>
       <p>Client #{id} reports</p>
-      <Button type="primary" onClick={createNewReport}>
+      <Button type="primary" onClick={createNewReport} className={styles.btn}>
         Add report
       </Button>
       <Spin spinning={isLoading}>{reportsRender}</Spin>

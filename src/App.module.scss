@@ -1,4 +1,12 @@
 .App {
   text-align: center;
-  // background-color: red;
+}
+
+.main {
+  min-height: calc(100vh - 120px);
+}
+
+.footer {
+  position: sticky;
+  bottom: 0;
 }

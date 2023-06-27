@@ -12,6 +12,10 @@ import {
 } from './store/clientSlice';
 import { fetchReports } from './store/reportSlice';
 import styles from './App.module.scss';
+import { GithubOutlined } from '@ant-design/icons';
+import { Divider, Layout } from 'antd';
+
+const { Footer } = Layout;
 
 function App() {
   const clientsSlice = useSelector(selectClientsSlice);
@@ -40,13 +44,27 @@ function App() {
   return (
     <div className={styles.App}>
       <Header onSearch={onSearch} />
-      <main>
+      <main className={styles.main}>
         <ClientsList
           isLoading={clientsSlice.loading}
           clients={filteredClients}
         />
       </main>
-      <footer className={styles.footer}>Implemented by Anna Iustus</footer>
+
+      {/* <Footer style={{ textAlign: 'center' }}>
+        Ant Design ©2023 Created by Ant UED
+      </Footer> */}
+
+      <Footer className={styles.footer}>
+        Implemented by{' '}
+        <a href="https://telescope.epam.com/who/Anna_Iustus?tab=profile">
+          Anna Iustus
+        </a>
+        <Divider type="vertical" />
+        <a href="https://github.com/Iogsotot">
+          <GithubOutlined />
+        </a>
+      </Footer>
     </div>
   );
 }
