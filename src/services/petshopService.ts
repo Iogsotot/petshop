@@ -67,7 +67,28 @@ export default class PetshopService implements IPetshopService {
       },
       body: JSON.stringify(data),
     });
-    const createdReport = await this.handleResponse(response);
+    const createdReport: IReportResponse = await this.handleResponse(response);
+
+    const clientResponse = await fetch(
+      `${this.apiBase}clients/${data.clientId}`
+    );
+    const client: IClientResponse = await this.handleResponse(clientResponse);
+
+    client.reportIds.push(createdReport.id);
+
+    const updateClientResponse = await fetch(
+      `${this.apiBase}clients/${data.clientId}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(client),
+      }
+    );
+
+    await this.handleResponse(updateClientResponse);
+
     return createdReport;
   };
 
