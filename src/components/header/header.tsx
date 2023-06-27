@@ -1,13 +1,20 @@
-import React from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../store/store';
 import { IClientResponse } from '../../services/petshopService';
 import { addClient } from '../../store/clientSlice';
 import { Button } from 'antd';
 import { getId } from '../../utils';
+import { Input } from 'antd';
+import styles from './header.module.scss';
 
-const Header = () => {
-  const dispatch: AppDispatch = useDispatch<AppDispatch>();
+const { Search } = Input;
+
+type HeaderProps = {
+  onSearch: (value: string) => void;
+};
+
+const Header = ({ onSearch }: HeaderProps) => {
+  const dispatch: AppDispatch = useDispatch();
 
   const createNewClient = () => {
     const id = getId();
@@ -16,19 +23,21 @@ const Header = () => {
       id,
       name: `Client ${id}`,
     };
-    console.log('create btn clicked: ', id);
     dispatch(addClient(newClientData));
   };
 
   return (
-    <>
+    <div className={styles.root}>
       <Button type="primary" onClick={createNewClient}>
         New Client
       </Button>
-      <form>
-        <input placeholder="Client search" />
-      </form>
-    </>
+
+      <Search
+        placeholder="Client search"
+        onSearch={onSearch}
+        className={styles.search}
+      />
+    </div>
   );
 };
 

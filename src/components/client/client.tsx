@@ -1,14 +1,13 @@
-import React from 'react';
-// import styles from './client.module.scss';
 import CollapsedBlock from '../collapsedBlock/collapsedBlock';
-import Report, { IReport } from '../report/report';
-import { Button } from 'antd';
-import { AppDispatch } from '../../store/store';
+import Report, { IReport, ReportsHash } from '../report/report';
+import { Button, Empty, Spin } from 'antd';
+import { AppDispatch, selectReports } from '../../store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { IReportResponse } from '../../services/petshopService';
 import { addReport, deleteData, deleteReport } from '../../store/reportSlice';
 import { getId } from '../../utils';
-import { RootState } from '../../types';
+
+import styles from './client.module.scss';
 
 export interface IClient {
   id: string;
@@ -24,17 +23,18 @@ const Client = ({ client, onDeleteClient }: ClientProps) => {
   const { name, id } = client;
   const dispatch: AppDispatch = useDispatch<AppDispatch>();
 
-  const reports = useSelector((state: RootState) =>
-    Object.values(state.reports).filter((report) => report.clientId === id)
+  const reportsResponse = useSelector(selectReports);
+  const reports: ReportsHash = reportsResponse.data;
+  const isLoading = reportsResponse.loading;
+
+  const filteredReports: IReport[] = Object.values(reports).filter(
+    (report) => report.clientId === id
   );
 
   const handleDeleteReport = (reportId: string) => {
-    console.log('onDeleteReport: ', reportId);
     dispatch(deleteReport(reportId));
   };
   const onDeleteData = (dataId: string, reportId: string) => {
-    console.log('onDeleteData: ', dataId, 'report id: ', reportId);
-    console.log(reports);
     dispatch(deleteData({ dataId, reportId }));
   };
 
@@ -45,24 +45,33 @@ const Client = ({ client, onDeleteClient }: ClientProps) => {
       data: [],
       clientId: id,
     };
-    console.log('create report for Client: ', name, id);
     dispatch(addReport(newReport));
   };
+
+  const reportsList = filteredReports.map((report: IReport) => (
+    <Spin spinning={isLoading} key={`spin-${report.id}`}>
+      <Report
+        key={report.id}
+        report={report}
+        onDeleteReport={() => handleDeleteReport(report.id)}
+        onDeleteData={onDeleteData}
+      ></Report>
+    </Spin>
+  ));
+
+  const reportsRender = filteredReports.length ? (
+    reportsList
+  ) : (
+    <Empty description="no reports"></Empty>
+  );
 
   return (
     <CollapsedBlock label={name} onDelete={onDeleteClient}>
       <p>Client #{id} reports</p>
-      <Button type="primary" onClick={createNewReport}>
+      <Button type="primary" onClick={createNewReport} className={styles.btn}>
         Add report
       </Button>
-      {reports.map((report: IReport) => (
-        <Report
-          key={report.id}
-          report={report}
-          onDeleteReport={() => handleDeleteReport(report.id)}
-          onDeleteData={onDeleteData}
-        ></Report>
-      ))}
+      <Spin spinning={isLoading}>{reportsRender}</Spin>
     </CollapsedBlock>
   );
 };

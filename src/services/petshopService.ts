@@ -67,7 +67,28 @@ export default class PetshopService implements IPetshopService {
       },
       body: JSON.stringify(data),
     });
-    const createdReport = await this.handleResponse(response);
+    const createdReport: IReportResponse = await this.handleResponse(response);
+
+    const clientResponse = await fetch(
+      `${this.apiBase}clients/${data.clientId}`
+    );
+    const client: IClientResponse = await this.handleResponse(clientResponse);
+
+    client.reportIds.push(createdReport.id);
+
+    const updateClientResponse = await fetch(
+      `${this.apiBase}clients/${data.clientId}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(client),
+      }
+    );
+
+    await this.handleResponse(updateClientResponse);
+
     return createdReport;
   };
 
@@ -75,6 +96,23 @@ export default class PetshopService implements IPetshopService {
     await fetch(`${this.apiBase}reports/${reportId}`, {
       method: 'DELETE',
     });
+  };
+
+  addDataItem = async (reportId: string, newData: TData): Promise<void> => {
+    const response = await fetch(`${this.apiBase}reports/${reportId}`);
+    const report: IReport = await this.handleResponse(response);
+
+    report.data.push(newData);
+
+    const updateResponse = await fetch(`${this.apiBase}reports/${reportId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(report),
+    });
+
+    await this.handleResponse(updateResponse);
   };
 
   deleteData = async (reportId: string, dataId: string) => {
