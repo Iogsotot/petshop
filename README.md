@@ -1,9 +1,8 @@
 # Petshop app
 A test CRUD application. Technical stack: React, TypeScript, Redux Toolkit, CSS modules, SCSS, Fake API (Json-server).
 
-## Available Scripts
+## To run the application, follow these steps:
 
-To run the application, follow these steps:
 
  1. Copy the repository code to your computer:
     
